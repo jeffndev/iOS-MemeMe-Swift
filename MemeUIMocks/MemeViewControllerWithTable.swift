@@ -17,13 +17,13 @@ class MemeViewControllerWithTable: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         //
-        tableView.reloadData()
+        //tableView.reloadData()
     }
     override func viewDidAppear(animated: Bool) {
-        print("table view did appear")
+        //print("table view did appear")
     }
     override func viewWillAppear(animated: Bool) {
-        print("table view will appear")
+        //print("table view will appear")
         tableView.reloadData()
     }
     

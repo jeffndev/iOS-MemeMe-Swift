@@ -336,28 +336,30 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="98" id="ApG-zT-gGc"/>
                                                         <constraint firstAttribute="width" constant="98" id="E19-Vr-FlW"/>
+                                                        <constraint firstAttribute="width" constant="100" id="u33-Az-2zS"/>
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
                                                             <exclude reference="ApG-zT-gGc"/>
                                                             <exclude reference="E19-Vr-FlW"/>
+                                                            <exclude reference="u33-Az-2zS"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="widthClass=compact" ambiguous="YES">
-                                                        <rect key="frame" x="10" y="9" width="98" height="98"/>
+                                                    <variation key="widthClass=compact">
                                                         <mask key="constraints">
-                                                            <include reference="ApG-zT-gGc"/>
-                                                            <include reference="E19-Vr-FlW"/>
+                                                            <exclude reference="ApG-zT-gGc"/>
+                                                            <exclude reference="E19-Vr-FlW"/>
+                                                            <include reference="u33-Az-2zS"/>
                                                         </mask>
                                                     </variation>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="row-sG-BCl">
                                                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="17"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
-                                                    <variation key="widthClass=compact" ambiguous="YES" misplaced="YES">
-                                                        <rect key="frame" x="112" y="43" width="288" height="21"/>
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <rect key="frame" x="112" y="44" width="288" height="24"/>
                                                     </variation>
                                                 </label>
                                             </subviews>
@@ -367,7 +369,12 @@
                                                 <constraint firstItem="UZP-vS-g5b" firstAttribute="leading" secondItem="Wjd-mn-L7L" secondAttribute="leadingMargin" constant="2" id="Bij-Bo-OpB"/>
                                                 <constraint firstItem="row-sG-BCl" firstAttribute="leading" secondItem="UZP-vS-g5b" secondAttribute="trailing" constant="4" id="CWL-3v-vcl"/>
                                                 <constraint firstItem="UZP-vS-g5b" firstAttribute="top" secondItem="Wjd-mn-L7L" secondAttribute="topMargin" constant="1" id="Ehu-ag-3eK"/>
-                                                <constraint firstItem="UZP-vS-g5b" firstAttribute="bottom" secondItem="Wjd-mn-L7L" secondAttribute="bottomMargin" constant="1" id="tuu-1f-eb4"/>
+                                                <constraint firstItem="UZP-vS-g5b" firstAttribute="top" secondItem="Wjd-mn-L7L" secondAttribute="topMargin" constant="1" id="Sd7-3h-ohR"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="UZP-vS-g5b" secondAttribute="bottom" constant="-15.5" id="lBJ-Pl-45W"/>
+                                                <constraint firstItem="UZP-vS-g5b" firstAttribute="bottom" secondItem="Wjd-mn-L7L" secondAttribute="bottomMargin" constant="1" id="tuu-1f-eb4">
+                                                    <variation key="widthClass=compact" constant="15.5"/>
+                                                </constraint>
+                                                <constraint firstAttribute="bottomMargin" secondItem="row-sG-BCl" secondAttribute="bottom" constant="27.5" id="wks-M8-pBa"/>
                                                 <constraint firstAttribute="trailing" secondItem="row-sG-BCl" secondAttribute="trailing" constant="148" id="xbc-Vz-9rU">
                                                     <variation key="widthClass=compact" constant="0.0"/>
                                                 </constraint>
@@ -378,33 +385,37 @@
                                                     <exclude reference="row-sG-BCl"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <exclude reference="Bij-Bo-OpB"/>
+                                                    <exclude reference="Ehu-ag-3eK"/>
+                                                    <exclude reference="Sd7-3h-ohR"/>
+                                                    <exclude reference="lBJ-Pl-45W"/>
+                                                    <exclude reference="tuu-1f-eb4"/>
                                                     <exclude reference="6Wg-z7-KBy"/>
                                                     <exclude reference="8Gj-N9-DsO"/>
                                                     <exclude reference="CWL-3v-vcl"/>
+                                                    <exclude reference="wks-M8-pBa"/>
                                                     <exclude reference="xbc-Vz-9rU"/>
-                                                    <exclude reference="Bij-Bo-OpB"/>
-                                                    <exclude reference="Ehu-ag-3eK"/>
-                                                    <exclude reference="tuu-1f-eb4"/>
                                                 </mask>
                                             </variation>
-                                            <variation key="widthClass=compact" ambiguous="YES">
-                                                <rect key="frame" x="0.0" y="0.0" width="400" height="100"/>
+                                            <variation key="widthClass=compact">
                                                 <mask key="subviews">
                                                     <include reference="UZP-vS-g5b"/>
                                                     <include reference="row-sG-BCl"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <include reference="Bij-Bo-OpB"/>
+                                                    <include reference="Ehu-ag-3eK"/>
+                                                    <include reference="Sd7-3h-ohR"/>
+                                                    <exclude reference="lBJ-Pl-45W"/>
+                                                    <include reference="tuu-1f-eb4"/>
                                                     <include reference="6Wg-z7-KBy"/>
                                                     <exclude reference="8Gj-N9-DsO"/>
                                                     <include reference="CWL-3v-vcl"/>
+                                                    <include reference="wks-M8-pBa"/>
                                                     <include reference="xbc-Vz-9rU"/>
-                                                    <include reference="Bij-Bo-OpB"/>
-                                                    <include reference="Ehu-ag-3eK"/>
-                                                    <include reference="tuu-1f-eb4"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="memeCaptions" destination="row-sG-BCl" id="hic-Cg-oGc"/>
                                             <outlet property="memeImage" destination="UZP-vS-g5b" id="REz-0W-ejm"/>

@@ -46,7 +46,7 @@ class MemeCollectionViewController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
         //grab current meme info, grab a memedetailviewcontroller (vc) from storyboard,
         //      pass meme info to the vc, push the vc on the navigationcontroller's stack
-        let selectedMeme = MemeHistory.sharedInstance.history[indexPath.row]
+        let selectedMeme = MemeHistory.sharedInstance.history[indexPath.item]
         let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
         vc.meme = selectedMeme
         navigationController?.pushViewController(vc, animated: true)
@@ -57,7 +57,7 @@ class MemeCollectionViewController: UICollectionViewController {
     }
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(memeCollectionCellID, forIndexPath: indexPath) as! MemeCollectionCell
-        let selectedMeme = MemeHistory.sharedInstance.history[indexPath.row]
+        let selectedMeme = MemeHistory.sharedInstance.history[indexPath.item]
         
         cell.memeImage.image = selectedMeme.memedImage
         return cell
