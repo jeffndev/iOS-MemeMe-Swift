@@ -9,33 +9,38 @@
 import UIKit
 
 
-class MemeViewControllerWithTable: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MemeViewControllerWithTable: UIViewController, UITableViewDataSource, UITableViewDelegate, AddMemeViewControllerDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     let tableCellID = "MemeTableCell"
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        //
-        //tableView.reloadData()
+    func synchData() {
+        let dataCount = MemeHistory.sharedInstance.history.count
+        let numItems = tableView.numberOfRowsInSection(0)
+        var newIdxs = [NSIndexPath]()
+        for i in numItems..<dataCount {
+            let indexPath = NSIndexPath(forItem: i, inSection: 0)
+            newIdxs.append(indexPath)
+        }
+        tableView.insertRowsAtIndexPaths(newIdxs, withRowAnimation: .Automatic)
     }
-    override func viewDidAppear(animated: Bool) {
-        //print("table view did appear")
-    }
+    
     override func viewWillAppear(animated: Bool) {
-        //print("table view will appear")
-        tableView.reloadData()
+        synchData()
     }
     
     @IBAction func newMeme(sender: AnyObject) {
         let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditorViewController") as! MemeEditorViewController
+        vc.delegate = self
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
+    func controller(didAddItem: MemeData) {
+        synchData()
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let numElements = MemeHistory.sharedInstance.history.count
-        print("table view data has \(numElements) elements")
-        return numElements //MemeHistory.sharedInstance.history.count
+        return MemeHistory.sharedInstance.history.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(tableCellID) as! MemeTableViewCell
@@ -44,19 +49,11 @@ class MemeViewControllerWithTable: UIViewController, UITableViewDataSource, UITa
         cell.memeCaptions.text = "\(selectedMeme.topText) \(selectedMeme.bottomText)"
         return cell
     }
-    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        //grab current meme info, grab a memedetailviewcontroller (vc) from storyboard,
-        //      pass meme info to the vc, push the vc on the navigationcontroller's stack
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let selectedMeme = MemeHistory.sharedInstance.history[indexPath.row]
         let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
         vc.meme = selectedMeme
-        if let navController = self.navigationController {
-            print("found nav, about to push detail..")
-            navController.pushViewController(vc, animated: true)
-            //self.navigationController?.pushViewController(vc, animated: true)
-        }else {
-            print("no nav controller in table view")
-        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
-    
 }

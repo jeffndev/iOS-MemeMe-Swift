@@ -11,6 +11,8 @@ import UIKit
 class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     //member VARIABLES
+    var delegate: AddMemeViewControllerDelegate?
+    
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var cameraToolBtn: UIBarButtonItem!
@@ -102,6 +104,17 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         currentMemedImage = nil
         resetTextFieldsToDefaults()
         actionToolBtn.enabled = false
+        //modal dlg to exit Meme Editor...
+        let vc = UIAlertController()
+        //vc.title = "Exit Editor"
+        //vc.message = "Would you like to exit Meme Editor?"
+        let okAction = UIAlertAction(title: "Exit Meme Editor", style: UIAlertActionStyle.Destructive) { action in
+            self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        vc.addAction(okAction)
+        let remainAction = UIAlertAction(title: "Continue", style: UIAlertActionStyle.Cancel, handler: nil)
+        vc.addAction(remainAction)
+        presentViewController(vc, animated: true, completion: nil)
     }
     @IBAction func cameraAction(){
         //take a picture and use that picture for the meme
@@ -144,6 +157,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         if currentMemedImage != nil {
             let meme = MemeData( image: mainImage.image, memedImage: currentMemedImage, topText: topTextField.text, bottomText: bottomTextField.text)
             MemeHistory.sharedInstance.history.append(meme)
+            delegate?.controller(meme)
         }
     }
     //Image Picker DELEGATES
