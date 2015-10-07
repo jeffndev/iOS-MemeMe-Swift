@@ -18,8 +18,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet weak var cameraToolBtn: UIBarButtonItem!
     @IBOutlet weak var actionToolBtn: UIBarButtonItem!
     @IBOutlet weak var mainImage: UIImageView!
-    @IBOutlet weak var topToolbar: UIToolbar!
-    @IBOutlet weak var bottomToolbar: UIToolbar!
+    
     //state variables...
     var framePushedUp = false
     var currentMemedImage: UIImage?
@@ -28,7 +27,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     let memeTextAttributes = [
         NSStrokeColorAttributeName : UIColor.blackColor(),
         NSForegroundColorAttributeName : UIColor.whiteColor(),
-        NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
+        NSFontAttributeName : UIFont(name: "AvenirNextCondensed-Bold", size: 40)!,
         NSStrokeWidthAttributeName : -5.0
     ]
     
@@ -56,7 +55,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         bottomTextField.delegate = self
         
         resetTextFieldsToDefaults()
-        
     }
     override func viewWillDisappear(animated: Bool) {
         UnSubscribeFromKeyboardEventNotifications()
@@ -75,7 +73,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     func keyboardWillShow(notification: NSNotification){
         //Push view frame up above the keyboard
         if bottomTextField.editing {
-            self.view.frame.origin.y -= self.getKeyboardHeight(notification)
+            view.frame.origin.y -= getKeyboardHeight(notification)
             framePushedUp = true
         }
     }
@@ -83,7 +81,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     func keyboardWillHide(notification: NSNotification){
         //Pull view frame back down after it was pushed up
         if framePushedUp {
-            self.view.frame.origin.y += self.getKeyboardHeight(notification)
+            view.frame.origin.y += getKeyboardHeight(notification)
             framePushedUp=false
         }
     }
@@ -97,7 +95,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
                 self.saveMeme()
                 self.dismissViewControllerAnimated(true, completion: nil)
             }
-        self.presentViewController(shareViewController, animated: true, completion: nil)
+        presentViewController(shareViewController, animated: true, completion: nil)
     }
     @IBAction func cancelAction(){
         mainImage.image = nil
@@ -106,8 +104,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         actionToolBtn.enabled = false
         //modal dlg to exit Meme Editor...
         let vc = UIAlertController()
-        //vc.title = "Exit Editor"
-        //vc.message = "Would you like to exit Meme Editor?"
         let okAction = UIAlertAction(title: "Exit Meme Editor", style: UIAlertActionStyle.Destructive) { action in
             self.dismissViewControllerAnimated(true, completion: nil)
             }
@@ -141,17 +137,16 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         bottomTextField.text = DEFAULT_BOTTOM_TEXT
     }
     func extractMemedImage() -> UIImage {
-        topToolbar.hidden = true
-        bottomToolbar.hidden = true
-        
         UIGraphicsBeginImageContext(self.view.frame.size)
         self.view.drawViewHierarchyInRect(self.view.frame, afterScreenUpdates: true)
         let mi: UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        topToolbar.hidden = false
-        bottomToolbar.hidden = false
-        return mi
+        let cropRect: CGRect = self.mainImage.frame
+        let imageRef: CGImageRef = CGImageCreateWithImageInRect(mi.CGImage, cropRect)!
+        let croppedImage = UIImage(CGImage: imageRef)
+        
+        return croppedImage
     }
     func saveMeme(){
         if currentMemedImage != nil {

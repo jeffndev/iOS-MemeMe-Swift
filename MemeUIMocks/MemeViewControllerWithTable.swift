@@ -14,6 +14,13 @@ class MemeViewControllerWithTable: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var tableView: UITableView!
     let tableCellID = "MemeTableCell"
     
+    
+    //LIFECYCLE overrides
+    override func viewWillAppear(animated: Bool) {
+        synchData()
+    }
+    
+    //HELPER methods
     func synchData() {
         let dataCount = MemeHistory.sharedInstance.history.count
         let numItems = tableView.numberOfRowsInSection(0)
@@ -25,20 +32,20 @@ class MemeViewControllerWithTable: UIViewController, UITableViewDataSource, UITa
         tableView.insertRowsAtIndexPaths(newIdxs, withRowAnimation: .Automatic)
     }
     
-    override func viewWillAppear(animated: Bool) {
-        synchData()
-    }
     
+    //ACTIONS
     @IBAction func newMeme(sender: AnyObject) {
         let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditorViewController") as! MemeEditorViewController
         vc.delegate = self
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
+    //delegate AddMemeViewControllerDelegate
     func controller(didAddItem: MemeData) {
         synchData()
     }
     
+    //delegates UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return MemeHistory.sharedInstance.history.count
     }

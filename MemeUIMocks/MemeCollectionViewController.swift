@@ -15,17 +15,14 @@ class MemeCollectionViewController: UICollectionViewController, AddMemeViewContr
     
     @IBOutlet weak var flowController: UICollectionViewFlowLayout!
     
-    
+    //ACTIONS
     @IBAction func newMeme(sender: AnyObject) {
         let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeEditorViewController") as! MemeEditorViewController
         vc.delegate = self
         self.presentViewController(vc, animated: true, completion: nil)
     }
     
-    func controller(didAddItem: MemeData) {
-        synchData()
-    }
-    
+    //HELPER methods
     func synchData() {
         let dataCount = MemeHistory.sharedInstance.history.count
         let numItems = self.collectionView!.numberOfItemsInSection(0)
@@ -37,15 +34,14 @@ class MemeCollectionViewController: UICollectionViewController, AddMemeViewContr
         self.collectionView?.insertItemsAtIndexPaths(newIdxs)
     }
     
+    //LIFECYCLE Overrides...
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        //TODO: THIS NOT WORKING!!
+        
         let space = CGFloat(2.0)
-        let adjustedFrameWidth = UIApplication.sharedApplication().statusBarOrientation.isPortrait ? self.view.frame.width : self.view.frame.height
-        //let adjustedFrameWidth = self.view.frame.width
-        let numItemsInRow = UIApplication.sharedApplication().statusBarOrientation.isPortrait ? 3.0 : 6.0
+        let adjustedFrameWidth = self.view.frame.width
+        let numItemsInRow = UIApplication.sharedApplication().statusBarOrientation.isPortrait ? 3.0 : 5.0
         let numCellsWide = CGFloat(numItemsInRow)
-        //TODO: code to orientation changes...
         flowController.minimumLineSpacing = space
         flowController.minimumInteritemSpacing = space
         let dimension = (adjustedFrameWidth - 2*space)/numCellsWide
@@ -53,7 +49,13 @@ class MemeCollectionViewController: UICollectionViewController, AddMemeViewContr
         
         synchData()
     }
+    //delegate AddMemeViewControllerDelegate
+    func controller(didAddItem: MemeData) {
+        synchData()
+    }
     
+    
+    //delegate/overrides UICollectionDataSource
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let selectedMeme = MemeHistory.sharedInstance.history[indexPath.item]
         let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
