@@ -11,7 +11,7 @@ import UIKit
 class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     //member VARIABLES
-    var delegate: AddMemeViewControllerDelegate?
+    //var delegate: AddMemeViewControllerDelegate?
     
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
@@ -22,6 +22,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     //state variables...
     var framePushedUp = false
     var currentMemedImage: UIImage?
+    var indexOfMemeToEdit: Int?
     
     //member CONSTANTS
     let memeTextAttributes = [
@@ -53,9 +54,18 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         bottomTextField.textAlignment = .Center
         bottomTextField.tag = BOTTOM_TEXT_TAG
         bottomTextField.delegate = self
-        
-        resetTextFieldsToDefaults()
+        if let idx = indexOfMemeToEdit {
+            let theMeme = MemeHistory.sharedInstance.get(NSIndexPath(forItem: idx, inSection: 0))
+            mainImage.image = theMeme.image
+            topTextField.text = theMeme.topText
+            bottomTextField.text = theMeme.bottomText
+            actionToolBtn.enabled = true
+        }else{
+            resetTextFieldsToDefaults()
+        }
     }
+    
+    
     override func viewWillDisappear(animated: Bool) {
         UnSubscribeFromKeyboardEventNotifications()
     }
@@ -151,8 +161,16 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     func saveMeme(){
         if currentMemedImage != nil {
             let meme = MemeData( image: mainImage.image, memedImage: currentMemedImage, topText: topTextField.text, bottomText: bottomTextField.text)
-            MemeHistory.sharedInstance.history.append(meme)
-            delegate?.controller(meme)
+            if let idx = indexOfMemeToEdit {
+                MemeHistory.sharedInstance.updateMeme(meme, atIndexPath: NSIndexPath(forItem: idx, inSection: 0))
+                //MemeHistory.sharedInstance.history[idx].memedImage = currentMemedImage
+                //MemeHistory.sharedInstance.history[idx].topText = topTextField.text
+                //MemeHistory.sharedInstance.history[idx].bottomText = bottomTextField.text
+            } else {
+                
+                MemeHistory.sharedInstance.appendMeme(meme)
+                //delegate?.controller(meme)
+            }
         }
     }
     //Image Picker DELEGATES
