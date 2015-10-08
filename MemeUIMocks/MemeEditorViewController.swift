@@ -11,8 +11,6 @@ import UIKit
 class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     //member VARIABLES
-    //var delegate: AddMemeViewControllerDelegate?
-    
     @IBOutlet weak var topTextField: UITextField!
     @IBOutlet weak var bottomTextField: UITextField!
     @IBOutlet weak var cameraToolBtn: UIBarButtonItem!
@@ -55,6 +53,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         bottomTextField.tag = BOTTOM_TEXT_TAG
         bottomTextField.delegate = self
         if let idx = indexOfMemeToEdit {
+            //if we are in EDIT mode, re-doing an existing Meme
             let theMeme = MemeHistory.sharedInstance.get(NSIndexPath(forItem: idx, inSection: 0))
             mainImage.image = theMeme.image
             topTextField.text = theMeme.topText
@@ -92,7 +91,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         //Pull view frame back down after it was pushed up
         if framePushedUp {
             view.frame.origin.y += getKeyboardHeight(notification)
-            framePushedUp=false
+            framePushedUp = false
         }
     }
     
@@ -151,7 +150,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         self.view.drawViewHierarchyInRect(self.view.frame, afterScreenUpdates: true)
         let mi: UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+        //crop to get ONLY what was in the mainImage view (removes the toolbars top/bottom)
         let cropRect: CGRect = self.mainImage.frame
         let imageRef: CGImageRef = CGImageCreateWithImageInRect(mi.CGImage, cropRect)!
         let croppedImage = UIImage(CGImage: imageRef)
@@ -163,13 +162,8 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
             let meme = MemeData( image: mainImage.image, memedImage: currentMemedImage, topText: topTextField.text, bottomText: bottomTextField.text)
             if let idx = indexOfMemeToEdit {
                 MemeHistory.sharedInstance.updateMeme(meme, atIndexPath: NSIndexPath(forItem: idx, inSection: 0))
-                //MemeHistory.sharedInstance.history[idx].memedImage = currentMemedImage
-                //MemeHistory.sharedInstance.history[idx].topText = topTextField.text
-                //MemeHistory.sharedInstance.history[idx].bottomText = bottomTextField.text
             } else {
-                
                 MemeHistory.sharedInstance.appendMeme(meme)
-                //delegate?.controller(meme)
             }
         }
     }
@@ -186,7 +180,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     //Text Field DELEGATES
-    
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField.tag == TOP_TEXT_TAG && textField.text == DEFAULT_TOP_TEXT{
             textField.text = ""

@@ -23,20 +23,6 @@ class MemeCollectionViewController: UICollectionViewController, DataObserver {
     }
     
     //HELPER methods
-    func synchData() {
-        let dataCount = MemeHistory.sharedInstance.count
-        let numItems = self.collectionView!.numberOfItemsInSection(0)
-        if numItems > dataCount {
-            self.collectionView?.reloadData()
-        } else {
-            var newIdxs = [NSIndexPath]()
-            for i in numItems..<dataCount {
-                let indexPath = NSIndexPath(forItem: i, inSection: 0)
-                newIdxs.append(indexPath)
-            }
-            self.collectionView?.insertItemsAtIndexPaths(newIdxs)
-        }
-    }
     
     //LIFECYCLE Overrides...
     override func viewDidLoad() {
@@ -53,13 +39,9 @@ class MemeCollectionViewController: UICollectionViewController, DataObserver {
         flowController.minimumInteritemSpacing = space
         let dimension = (adjustedFrameWidth - 2*space)/numCellsWide
         flowController.itemSize = CGSizeMake(dimension,dimension)
-        
-        synchData()
     }
-//    //delegate AddMemeViewControllerDelegate
-//    func controller(didAddItem: MemeData) {
-//        synchData()
-//    }
+    
+    //DataObserver delegates
     func insert(indexPath: NSIndexPath) {
         collectionView?.insertItemsAtIndexPaths([indexPath])
     }
@@ -72,7 +54,6 @@ class MemeCollectionViewController: UICollectionViewController, DataObserver {
     
     //delegate/overrides UICollectionDataSource
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        //let selectedMeme = MemeHistory.sharedInstance.get(indexPath)
         let vc = storyboard?.instantiateViewControllerWithIdentifier("MemeDetailViewController") as! MemeDetailViewController
         vc.memeHistoryIndex = indexPath.item
         navigationController?.pushViewController(vc, animated: true)
@@ -87,5 +68,4 @@ class MemeCollectionViewController: UICollectionViewController, DataObserver {
         cell.memeImage.image = selectedMeme.memedImage
         return cell
     }
-    
 }

@@ -16,7 +16,6 @@ class MemeHistory {
     private var observers = [DataObserver]()
     
     func get(atIndex: NSIndexPath) -> MemeData {
-        //TODO: change to optional return
         return history[atIndex.item]
     }
     func addObserver(obs: DataObserver) {
